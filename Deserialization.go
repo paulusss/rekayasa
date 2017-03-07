@@ -17,20 +17,19 @@ func main() {
 	listener, err := net.ListenTCP("tcp", tcpAddr)
 	checkError(err)
 
-	s := make([][]byte, 0)
 	for {
 		conn, err := listener.Accept()
 		if err != nil {
 			continue
 		}
 
-		go handleClient(conn, s)
+		go handleClient(conn)
 
 	}
 
 }
 
-func handleClient(conn net.Conn, s [][]byte) {
+func handleClient(conn net.Conn) {
 	defer conn.Close() //akan dijalankan terakhir sebelum mengeluarkan return value
 	fmt.Println("Mendapat koneksi dari ", conn.RemoteAddr().String())
 	namaFile := (conn.RemoteAddr().String()) + " - " + (time.Now().String())
