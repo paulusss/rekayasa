@@ -17,7 +17,7 @@ func main() {
 	file, err := os.Open(os.Args[2])
 	checkError(err)
 	defer file.Close()
-	fmt.Println("file ", file, " berhasil dibuka")
+	fmt.Println("file ", file.Name(), " berhasil dibuka")
 
 	service := os.Args[1]
 
@@ -27,18 +27,15 @@ func main() {
 	checkError(err)
 
 	scanner := bufio.NewScanner(file)
-	fmt.Println("Membuka file ", file.Name())
-	baris := 1
+
 	for scanner.Scan() {
-		fmt.Println("Membuka baris ke-", baris)
-		fmt.Println(scanner.Text())
-		_, err = conn.Write([]byte(scanner.Text()))
-		checkError(err)
-		fmt.Println("Baris ke-", baris, " terkirim")
-		_, err = conn.Write([]byte("\n"))
-		checkError(err)
 		fmt.Println("")
-		baris = baris + 1
+		_, err = conn.Write([]byte(scanner.Text() + "\n"))
+		checkError(err)
+		fmt.Println("\"", scanner.Text(), "\" - terkirim")
+
+		checkError(err)
+
 	}
 
 	if err := scanner.Err(); err != nil {
